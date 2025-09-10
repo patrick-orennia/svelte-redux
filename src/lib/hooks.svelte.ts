@@ -24,16 +24,23 @@ export function useSelector<TState, TSelected>(
 
 	store.subscribe(() => {
 		const nextState = selector(store.getState());
-		const hasComplexChange =
-			lastState !== null &&
-			typeof lastState === 'object' &&
-			nextState !== null &&
-			typeof nextState === 'object'
-				? diff(lastState as Record<string, unknown>, nextState as Record<string, unknown>).length >
-					0
-				: false;
 
-		if (nextState !== lastState || hasComplexChange) {
+		const isArrayOrObject = typeof nextState === 'object' || Array.isArray(nextState);
+
+		if (isArrayOrObject) {
+			const diffValue = diff(
+				$state.snapshot(lastState) as Record<string, unknown>,
+				nextState as Record<string, unknown>
+			);
+
+			if (diffValue.length > 0) {
+				lastState = nextState;
+				return;
+			}
+			return;
+		}
+
+		if (nextState !== lastState) {
 			lastState = nextState;
 		}
 	});

@@ -15,14 +15,22 @@
 	const allCountsAreEven = $derived.by(() => {
 		return allCounts.value.value % 2 === 0 && allCounts.value.secondValue % 2 === 0;
 	});
+	const listOfPastValues = useSelector((state: RootState) => {
+		return state.counter.listOfPastValues;
+	});
+	const complexListOfPastValues = useSelector((state: RootState) => {
+		return state.counter.complexListOfPastValues;
+	});
 
-	const sumOfCounts = $derived(count.value + secondCount.value);
+	const sumOfCounts = $derived(listOfPastValues.value.reduce((acc, curr) => acc + curr, 0));
 	const dispatch = useDispatch();
 
 	$inspect('count', count.value);
 	$inspect('secondCount', secondCount.value);
 	$inspect('allCounts', allCounts.value);
 	$inspect('allCountsAreEven', allCountsAreEven);
+	$inspect('listOfPastValues', listOfPastValues.value);
+	$inspect('complexListOfPastValues', complexListOfPastValues.value);
 </script>
 
 <h1>Hello</h1>

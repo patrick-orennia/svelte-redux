@@ -3,11 +3,17 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 export interface CounterState {
 	value: number;
 	secondValue: number;
+	listOfPastValues: number[];
+	complexListOfPastValues: {
+		secondValue: number;
+	}[];
 }
 
 const initialState: CounterState = {
 	value: 0,
-	secondValue: -1
+	secondValue: -1,
+	listOfPastValues: [0],
+	complexListOfPastValues: [{ secondValue: 0 }]
 };
 
 export const counterSlice = createSlice({
@@ -16,15 +22,19 @@ export const counterSlice = createSlice({
 	reducers: {
 		increment: (state) => {
 			state.value += 1;
+			state.listOfPastValues.push(state.value);
 		},
 		decrement: (state) => {
 			state.value -= 1;
+			state.listOfPastValues.push(state.value);
 		},
 		incrementSecondValue: (state) => {
 			state.secondValue += 1;
+			state.complexListOfPastValues.push({ secondValue: state.secondValue });
 		},
 		decrementSecondValue: (state) => {
 			state.secondValue -= 1;
+			state.complexListOfPastValues.push({ secondValue: state.secondValue });
 		}
 	}
 });
